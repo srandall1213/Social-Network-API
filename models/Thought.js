@@ -1,5 +1,40 @@
 const { Schema, model } = require('mongoose');
 
+// used as the reaction field's subdocument schema in the Thought model
+const reactionSchema = new Schema(
+    {
+    // reactionId: Mongoose's ObjectId data type, default value is set to a new ObjectId
+        reactionId: { 
+            type: Schema.Types.ObjectId, 
+            default: () => new Types.ObjectId() 
+        },
+        // reactionBody: string, required, 280 character max
+        reactionBody: { 
+            type: String, 
+            required: true, 
+            maxlength: 280 
+        },
+        // username: string, required
+        username: { 
+            type: String, 
+            required: true 
+        },
+        // createdAt: date, default to current timestamp, getter method to format the timestamp on query
+        createdAt: { 
+            type: Date, 
+            default: Date.now,
+            get: (val) => formatDate(val)
+        },
+
+    },
+    {
+        toJSON: { 
+            getters: true 
+        },
+        id: false,
+    }
+);
+
 const thoughtSchema = new Schema(
     {
         // thoughtText: string, required, between 1-280 characters
@@ -43,41 +78,6 @@ thoughtSchema
     .get(function () {
     return this.reactions.length;
     });
-
-// used as the reaction field's subdocument schema in the Thought model
-const reactionSchema = new Schema(
-    {
-    // reactionId: Mongoose's ObjectId data type, default value is set to a new ObjectId
-        reactionId: { 
-            type: Schema.Types.ObjectId, 
-            default: () => new Types.ObjectId() 
-        },
-        // reactionBody: string, required, 280 character max
-        reactionBody: { 
-            type: String, 
-            required: true, 
-            maxlength: 280 
-        },
-        // username: string, required
-        username: { 
-            type: String, 
-            required: true 
-        },
-        // createdAt: date, default to current timestamp, getter method to format the timestamp on query
-        createdAt: { 
-            type: Date, 
-            default: Date.now,
-            get: (val) => formatDate(val)
-        },
-
-    },
-    {
-        toJSON: { 
-            getters: true 
-        },
-        id: false,
-    }
-);
 
 const Thought = model('Thought', thoughtSchema);
 
