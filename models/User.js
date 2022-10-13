@@ -1,22 +1,51 @@
-// User:
+const { Schema, model } = require('mongoose');
 
-//// username
-// String
-// Unique
-// Required
-// Trimmed
+const userSchema = new Schema(
+    {
+        // username: string, unique, required, trimmed
+        username: { 
+            type: String, 
+            unique: true, 
+            required: true, 
+            trim: true 
+        },
+        // email: string, required, unique, matches a valid email
+        email: { 
+            type: String, 
+            required: true, 
+            unique: true,
+            match: [/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/]
+        },
+        // thoughts: array of _id values referencing the Thought model
+        thoughts: [
+            { 
+                type: Schema.Types.ObjectId,
+                ref: 'Thought' 
+            }
+        ],
+        // friends: array of _id values referencing the User model (self-reference)
+        friends: [
+            { 
+                type: Schema.Types.ObjectId, 
+                ref: 'User' 
+            }
+        ],
+    },
+    {
+        toJSON: { 
+            virtuals: true 
+        },
+        id: false,
+    }
+);
 
-//// email
-// String
-// Required
-// Unique
-// Must match a valid email address (look into Mongoose's matching validation)
+// virtual called friendCount that retrieves the length of the user's friends array field on query
+userSchema
+    .virtual('friendCount')
+    .get(function () {
+        return this.friends.length;
+    });
 
-//// thoughts
-// Array of _id values referencing the Thought model
+const User = model('User', userSchema);
 
-//// friends
-// Array of _id values referencing the User model (self-reference)
-
-// Schema Settings:
-// Create a virtual called friendCount that retrieves the length of the user's friends array field on query.
+module.exports = User;
