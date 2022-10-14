@@ -85,7 +85,7 @@ module.exports = {
         .then((thought) =>
           !thought
             ? res.status(404).json({ message: 'No thought with this ID!' })
-            : res.json(video)
+            : res.json(thought)
         )
         .catch((err) => res.status(500).json(err));
     },

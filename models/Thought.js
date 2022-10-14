@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, Types, model } = require('mongoose');
 
 // used as the reaction field's subdocument schema in the Thought model
 const reactionSchema = new Schema(
@@ -23,7 +23,7 @@ const reactionSchema = new Schema(
         createdAt: { 
             type: Date, 
             default: Date.now,
-            get: (val) => formatDate(val)
+            get: (date) => formatDate(date)
         },
 
     },
