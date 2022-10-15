@@ -67,16 +67,27 @@ const thoughtSchema = new Schema(
     }
 );
 
-// get date format
-function formatDate() {
-    console.log(`Today's date: ${this.createdAt}`)
+//formats queried timestamps
+function formatDate(timeStamp) {
+    let formattedDate =
+        timeStamp.toLocaleDateString
+        ('en-us', 
+            { 
+                year:"numeric", 
+                month:"numeric", 
+                day:"numeric", 
+                hour:"2-digit", 
+                minute:"2-digit", 
+            }
+        )
+    return formattedDate;
 }
 
 // virtual called reactionCount that retrieves the length of the thought's reactions array field on query
 thoughtSchema
     .virtual('reactionCount')
     .get(function () {
-    return this.reactions.length;
+        return this.reactions.length;
     });
 
 const Thought = model('Thought', thoughtSchema);

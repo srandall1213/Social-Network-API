@@ -75,7 +75,7 @@ module.exports = {
         )
         .catch((err) => res.status(500).json(err));
     },
-    // NEW REACTION
+    // ADD REACTION
     addReaction(req, res) {
       Thought.findOneAndUpdate(
         { _id: req.params.thoughtId },
